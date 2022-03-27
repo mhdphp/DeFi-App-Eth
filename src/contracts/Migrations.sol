@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-contrac Migrations {
+contract Migrations {
     address public owner;
     uint public last_completed_migration;
 
     constructor() {
-        owener = msg.sender;
+        owner = msg.sender;
     }
 
     modifier restricted() {
@@ -15,7 +15,7 @@ contrac Migrations {
         if(msg.sender == owner) _;
     }
 
-    function set_completed(uint completed) public restricted {
+    function setCompleted(uint completed) public restricted {
         last_completed_migration = completed;
     }
 
@@ -23,6 +23,6 @@ contrac Migrations {
         // instantiate new Migrations contract with new_address
         Migrations upgraded = Migrations(new_address);
         // set_completed to the new address in the new contract
-        upgraded.set_completed(new_address);
+        upgraded.setCompleted(last_completed_migration);
     }
 }
