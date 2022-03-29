@@ -21,6 +21,9 @@ contract Tether {
     );
 
     mapping(address => uint256) public balanceOf;
+    // first address is the owner the second mapping are the list of addresses with
+    // their allowances to transfer
+    mapping(address => mapping(address => uint256)) public allowance;
 
     constructor() {
         balanceOf[msg.sender] = totalSupply;
@@ -32,6 +35,23 @@ contract Tether {
         balanceOf[msg.sender] -= _value;
         balanceOf[_to] += _value;
         emit Transfer(msg.sender, _to, _value);
+        return true;
+    }
+
+    function approve(address _spender, uint256 _value) public returns (bool success){
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+
+    // transfer inter third parties
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success){
+        require(_value <= balanceOf[_from]);
+        require(_value <= allowance[msg.sender][_from]);
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+        allowance[msg.sender][_from] -= _value;
+        emit Transfer(_from, _to, _value);
         return true;
     }
 
