@@ -6,14 +6,30 @@ const DecentralBank = artifacts.require('DecentralBank');
 
 require('chai').use(require('chai-as-promised')).should();
 
-contract('DecentralBank', (accounts) =>{
-    //let tether;
+contract('DecentralBank', ([owner, investor]) =>{
+    let tether, rwd, decentralBank;
+
+    // helper function
+    // convert ether into wei
+    function tokens(stringNum){
+        return web3.utils.toWei(stringNum, 'ether');
+    }
+
+    before( async() =>{
+        // load contracts
+        tether = await Tether.new();
+        rwd = await RWD.new();
+        decentralBank = await DecentralBank.new(tether.address, rwd.address);
+
+        // transfer 1000000 RWD tokens to DecentralBank 
+        await rwd.transfer(decentralBank.address, tokens('1000000'));
+
+        // transfer 100 USDT (Mock Tether) to investor account (second Ganache account)
+        await tether.transfer(investor, tokens('100'), {from: owner});
+    });
 
     describe('Mock Tether Deployment', async() => {
         it('Matches name successfully', async () => {
-            // works both ways
-            // tether = await Tether.deployed();
-            let tether = await Tether.new();
             const name = await tether.name();
             assert.equal(name, 'Mock Tether Contract');
         });
@@ -21,9 +37,6 @@ contract('DecentralBank', (accounts) =>{
 
     describe('RWD Deployment', async() => {
         it('Matches name successfully', async () => {
-            // works both ways
-            // tether = await Tether.deployed();
-            let rwd = await RWD.new();
             const name = await rwd.name();
             assert.equal(name, 'Reward Token');
         });
