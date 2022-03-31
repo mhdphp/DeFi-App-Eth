@@ -1,4 +1,3 @@
-const assert = require('assert');
 
 const Tether = artifacts.require('Tether');
 const RWD = artifacts.require('RWD')
@@ -40,6 +39,19 @@ contract('DecentralBank', ([owner, investor]) =>{
             const name = await rwd.name();
             assert.equal(name, 'Reward Token');
         });
+    });
+
+    describe('Decentral Bank Deployment', async() => {
+        it('Matches name successfully', async () => {
+            const name = await decentralBank.name();
+            assert.equal(name, 'Decentral Bank');
+        });
+
+        it('Contract has RWD tokens', async () => {
+            let balance = await rwd.balanceOf(decentralBank.address);
+            assert.equal(balance, tokens('1000000'));
+        });
+
     });
 
 });
