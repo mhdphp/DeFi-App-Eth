@@ -38,6 +38,7 @@ contract Tether {
         return true;
     }
 
+    // approve by the owner to third party to spend (_spender) in his behalf the _value
     function approve(address _spender, uint256 _value) public returns (bool success){
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
@@ -45,12 +46,16 @@ contract Tether {
     }
 
     // transfer inter third parties
+    // initiate transfer by third party(msg.sender) to transfer funds _from (owner), _to (recipient)
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success){
+        // _from is the owner of the token account
+        // _ to is the recipient of the transfer
+        // msg.sender is the third party approved to make the transfer on behalf of the owner (_from)
         require(_value <= balanceOf[_from]);
-        require(_value <= allowance[msg.sender][_from]);
+        require(_value <= allowance[_from][msg.sender]);
         balanceOf[_from] -= _value;
         balanceOf[_to] += _value;
-        allowance[msg.sender][_from] -= _value;
+        allowance[_from][msg.sender] -= _value;
         emit Transfer(_from, _to, _value);
         return true;
     }

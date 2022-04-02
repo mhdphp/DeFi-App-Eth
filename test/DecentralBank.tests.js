@@ -1,3 +1,4 @@
+// const assert = require('console');
 
 const Tether = artifacts.require('Tether');
 const RWD = artifacts.require('RWD')
@@ -51,7 +52,35 @@ contract('DecentralBank', ([owner, investor]) =>{
             let balance = await rwd.balanceOf(decentralBank.address);
             assert.equal(balance, tokens('1000000'));
         });
+    });
 
+    describe('Yield Farming', async() => {
+        it('Rewards tokens for staking', async () => {
+            let result;
+            // check investor balance
+            result = await tether.balanceOf(investor);
+            assert.equal(result, tokens('100'), 'investor mock tether wallet balance BEFORE staking');
+
+            // checking Staking for Investor
+            // first approve from Decentral Bank to stake the amount of tokens from investor
+            await tether.approve(decentralBank.address, tokens('100'), {from: investor});
+            // second deposit tokens for staking
+            await decentralBank.depositTokens(tokens('100'), {from: investor});
+
+            // check investor updated balance (after depositing tokens with the Decentral Bank)
+            result = await tether.balanceOf(investor);
+            assert.equal(result, tokens('0'), 'investor mock tether wallet balance AFTER staking');
+
+            // check the updated balance of the Decentral Bank after staking
+            // work both statements
+            //result = await decentralBank.stakingBalance(investor);
+            result = await tether.balanceOf(decentralBank.address);
+            assert.equal(result, tokens('100'), 'Decentral Bank wallet balance AFTER staking');
+
+            // check the isStaking status
+            result = await decentralBank.isStaking(investor);
+            assert.equal(result.toString(), 'true', 'investor is staking status is true')
+        });
     });
 
 });

@@ -21,6 +21,6 @@ module.exports = async function (deployer, network, accounts){
     await rwd.transfer(deBank.address, '1000000000000000000000000');
 
     // distribute 100 Tether tokens to the investor - this is the second account Ganache
-    // accounts[1] the second account from Ganache first 10 accounts
+    // accounts[1] the second account from Ganache first 10 accounts - transfer 100 tokens
     await tether.transfer(accounts[1], '100000000000000000000');
 }
