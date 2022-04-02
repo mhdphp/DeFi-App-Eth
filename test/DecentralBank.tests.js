@@ -31,7 +31,7 @@ contract('DecentralBank', ([owner, investor]) =>{
     describe('Mock Tether Deployment', async() => {
         it('Matches name successfully', async () => {
             const name = await tether.name();
-            assert.equal(name, 'Mock Tether Contract');
+            assert.equal(name, 'Mock Tether Token');
         });
     });
 
@@ -79,7 +79,29 @@ contract('DecentralBank', ([owner, investor]) =>{
 
             // check the isStaking status
             result = await decentralBank.isStaking(investor);
-            assert.equal(result.toString(), 'true', 'investor is staking status is true')
+            assert.equal(result.toString(), 'true', 'investor is staking status is true');
+
+            // issue RWD tokens
+            await decentralBank.issueTokens({from:owner});
+
+            // Only owner can issue tokens
+            await decentralBank.issueTokens({from:investor}).should.be.rejected;
+
+            // Unstake tokens
+            await decentralBank.unstakedTokens({from:investor});
+
+            // check investor updated balance (after unstaking)
+            result = await tether.balanceOf(investor);
+            assert.equal(result, tokens('100'), 'investor mock tether wallet balance AFTER unstaking');
+
+            // check the updated balance of the Decentral Bank after unstaking
+            result = await tether.balanceOf(decentralBank.address);
+            assert.equal(result, tokens('0'), 'Decentral Bank wallet balance AFTER unstaking');
+
+            // check the isStaking status
+            result = await decentralBank.isStaking(investor);
+            assert.equal(result.toString(), 'false', 'investor is staking status is true');
+
         });
     });
 

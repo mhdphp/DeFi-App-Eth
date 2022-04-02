@@ -21,7 +21,7 @@ contract DecentralBank {
     constructor(Tether _tether, RWD _rwd) {
         tether = _tether;
         rwd = _rwd;
-        //owner = msg.sender;
+        owner = msg.sender;
     }
 
     // staking function
@@ -39,6 +39,33 @@ contract DecentralBank {
         }
         isStaking[msg.sender] = true;
         hasStaked[msg.sender] = true;
-
     }
+
+     // issue token rewards - RWD
+     // the staker deposit Mock Tether Token and as a reward receives the 1/9 * ammount but
+     // in Reward Token
+        function issueTokens() public {
+            // require that only the contract owner to be able to issue tokens
+            require(msg.sender == owner, 'caller must be the contract owner');
+            // loop to stakers array
+            for (uint i=0; i<stakers.length; i++){
+                address recipient = stakers[i];
+                // each staker receives 1/9 of its balance staked in RWD tokens
+                uint balance = stakingBalance[recipient] / 9;
+                if (balance > 0){
+                    rwd.transfer(recipient, balance);
+                }
+            }
+    }
+
+    // Unstake tokens
+    function unstakedTokens() public{
+        uint balance = stakingBalance[msg.sender];
+        require(balance > 0,'staking balance can not be less than zero');
+        // transfer the tokens to the specified contract address from decentral bank
+        tether.transfer(msg.sender, balance);
+        stakingBalance[msg.sender] = 0;
+        isStaking[msg.sender] = false;
+    }
+
 }

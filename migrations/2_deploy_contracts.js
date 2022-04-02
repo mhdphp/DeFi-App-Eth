@@ -18,7 +18,7 @@ module.exports = async function (deployer, network, accounts){
     const deBank = await DecentralBank.deployed();
 
     // transfer all the Reward Tokens - RWD to the DecentralBank address
-    await rwd.transfer(deBank.address, '1000000000000000000000000');
+    await rwd.transfer(deBank.address, '1000000000000000000000000');   
 
     // distribute 100 Tether tokens to the investor - this is the second account Ganache
     // accounts[1] the second account from Ganache first 10 accounts - transfer 100 tokens
