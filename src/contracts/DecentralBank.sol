@@ -10,6 +10,7 @@ contract DecentralBank {
     // define contract Tether and RWD objects
     Tether public tether;
     RWD public rwd;
+    uint256 public rwdAcc;
 
     address[] public stakers;
     // keeping track of staking address and amounts
@@ -22,6 +23,10 @@ contract DecentralBank {
         tether = _tether;
         rwd = _rwd;
         owner = msg.sender;
+    }
+
+    function setRWDAcc() public {
+        rwdAcc = rwd.balanceOf(address(this));
     }
 
     // staking function
