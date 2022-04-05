@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './Navbar.js';
 import Navbar from './Navbar.js';
 import Web3 from 'web3';
+// import Tether.json from abis
+import Tether from '../abis/Tether.json';
 
 
 class App extends Component {
@@ -29,14 +31,43 @@ class App extends Component {
     async loadBlockchainData() {
         const web3 = window.web3;
         const accounts = await web3.eth.getAccounts();
-        console.log(accounts[0]);
+        this.setState({account:accounts[0]})
+        console.log('account 0', accounts[0]);
+        // get the network ID in our case Ganache network
+        const networkId = await web3.eth.net.getId();
+        //console.log(networkId);
+        // load Tether object for networkId
+        const tetherData = Tether.networks[networkId];
+        // console.log(tetherData);
+        if (tetherData) {
+            // load the Tether contract
+            const tether =  new web3.eth.Contract(Tether.abi,tetherData.address);
+            // update the state
+            this.setState({tether}); // {tether:tether} -> {tether}
+            // run the balanceOf() function in tether contract - since
+            // we are using web3 the syntax is a little different
+            let tetherBalance = await tether.methods.balanceOf(this.state.account).call();
+            let tetherBalanceC = web3.utils.fromWei(tetherBalance);
+            console.log('Tether Balance', tetherBalanceC);
+            // update the state variable
+            this.setState({tetherBalance : tetherBalance.toString()});
+        } else {
+            window.alert('Error: Tether contract not deployed - no detected network');
+        }
     }
 
    
     constructor(props) {
         super(props);
         this.state = {
-            account : '0x0'
+            account : '0x0',
+            tether: {},
+            rwd: {},
+            decentralBank: {},
+            tetherBalance: '0',
+            rwdBalance: '0',
+            stakingBalance: '0',
+            loading: true
         }
     }
 
