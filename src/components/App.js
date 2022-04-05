@@ -4,6 +4,8 @@ import Navbar from './Navbar.js';
 import Web3 from 'web3';
 // import Tether.json from abis
 import Tether from '../abis/Tether.json';
+import RWD from '../abis/RWD.json';
+import DecentralBank from '../abis/DecentralBank.json';
 
 
 class App extends Component {
@@ -36,7 +38,8 @@ class App extends Component {
         // get the network ID in our case Ganache network
         const networkId = await web3.eth.net.getId();
         //console.log(networkId);
-        // load Tether object for networkId
+
+        // Tether contract
         const tetherData = Tether.networks[networkId];
         // console.log(tetherData);
         if (tetherData) {
@@ -47,12 +50,44 @@ class App extends Component {
             // run the balanceOf() function in tether contract - since
             // we are using web3 the syntax is a little different
             let tetherBalance = await tether.methods.balanceOf(this.state.account).call();
-            let tetherBalanceC = web3.utils.fromWei(tetherBalance);
-            console.log('Tether Balance', tetherBalanceC);
+            // let tetherBalanceC = web3.utils.fromWei(tetherBalance);
+            console.log({'balanceTether' : tetherBalance});
             // update the state variable
             this.setState({tetherBalance : tetherBalance.toString()});
         } else {
             window.alert('Error: Tether contract not deployed - no detected network');
+        }
+
+        // RWD contract
+        const rwdData = RWD.networks[networkId];
+        // console.log(rwdData);
+        if (rwdData) {
+            // load the EWD contract
+            const rwd =  new web3.eth.Contract(RWD.abi,rwdData.address);
+            // update the state
+            this.setState({rwd});
+            let rwdBalance = await rwd.methods.balanceOf(this.state.account).call();
+            console.log({'balanceRWD' : rwdBalance});
+            // update the state variable
+            this.setState({rwdBalance : rwdBalance.toString()});
+        } else {
+            window.alert('Error: RWD contract not deployed - no detected network');
+        }
+        
+        // DecentralBank contract
+        const decentralBankData = DecentralBank.networks[networkId];
+        // console.log(rwdData);
+        if (decentralBankData) {
+            // load the EWD contract
+            const decentralBank =  new web3.eth.Contract(DecentralBank.abi,decentralBankData.address);
+            // update the state
+            this.setState({decentralBank});
+            let stakingBalance = await decentralBank.methods.stakingBalance(this.state.account).call();
+            console.log({'stakingBalance' : stakingBalance});
+            // update the state variable
+            this.setState({stakingBalance : stakingBalance.toString()});
+        } else {
+            window.alert('Error: DecentralBank contract not deployed - no detected network');
         }
     }
 
