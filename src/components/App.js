@@ -89,6 +89,9 @@ class App extends Component {
         } else {
             window.alert('Error: DecentralBank contract not deployed - no detected network');
         }
+
+        // since loading is completed we turn it on false
+        this.setState({loading: false});
     }
 
    
@@ -109,11 +112,11 @@ class App extends Component {
     render() {
         return(
             <div>
-                <Navbar account={this.state.account}>
-                    <div className='text-center'>
-                        <h2> Sa Te Alerg </h2>
-                    </div>
-                </Navbar>
+                <Navbar account={this.state.account}/>
+                <div className='text-center' style={{marginTop: '80px'}}>
+                        <h2 className='font-weight-light'> Title Test </h2>
+                </div>
+                    <p>{console.log(this.state.loading)}</p>   
             </div>
         );
     }
