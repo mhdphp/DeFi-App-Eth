@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './Navbar.js';
 import Navbar from './Navbar.js';
+import Main from './Main.js';
 import Web3 from 'web3';
-// import Tether.json from abis
+// import contracts *.json from abis
 import Tether from '../abis/Tether.json';
 import RWD from '../abis/RWD.json';
 import DecentralBank from '../abis/DecentralBank.json';
@@ -113,10 +114,19 @@ class App extends Component {
         return(
             <div>
                 <Navbar account={this.state.account}/>
-                <div className='text-center' style={{marginTop: '80px'}}>
-                        <h2 className='font-weight-light'> Title Test </h2>
-                </div>
-                    <p>{console.log(this.state.loading)}</p>   
+                <div className='container-fluid text-center' style={{marginTop: '75px'}} >
+                   {/* <h2>TEST</h2> */}
+                   <div className='row'>
+                        <main role='main' className='col-lg-12 ml-auto mr-auto'
+                            style={{maxWidth:'600px', minHeight: '100vm'}}>
+                                <p>test</p>
+                                <div>
+                                    <Main/>
+                                </div>
+                        </main> 
+                   </div>
+                   
+                </div>     
             </div>
         );
     }
