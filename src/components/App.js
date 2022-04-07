@@ -95,6 +95,26 @@ class App extends Component {
         this.setState({loading: false});
     }
 
+    // two function one that stakes and the other that unstakes
+    // use DecentralBank contract - depositTokens (stake), unstakeTokens
+    // function approve transaction hash
+    
+    // Staking function
+    stakeTokens = (amount) => {
+        this.setState({loading: true});
+        this.state.methods.tether
+            .approve(this.state.decentralBank._address, amount)
+            .send({from: this.state.account})
+            .on('transactionHash', (hash) => {
+                this.state.decentralBank.methods.depositTokens(amount)
+                    .send({from:this.state.account})
+                    .on('transactionHash', (hash) => {
+                        this.setState({loading: false});
+                    });
+            });
+    }       
+    
+
    
     constructor(props) {
         super(props);
@@ -119,6 +139,7 @@ class App extends Component {
                         tetherBalance = {this.state.tetherBalance}
                         rwdBalance = {this.state.rwdBalance}
                         stakingBalance = {this.state.stakingBalance}
+                        stakeTokens ={this.stakeTokens}
                     />}
         return(
             <div>

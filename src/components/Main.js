@@ -30,7 +30,7 @@ class Main extends Component {
                             <label className='float-left' style={{marginLeft:'15px'}}><b>
                                 Stake Tokens</b></label>
                             <span className='float-right' style={{marginRight:'8px'}}>
-                                <b>Balance: {window.web3.utils.fromWei(this.props.tetherBalance, 'Ether')}</b>
+                                <b>Balance: {window.web3.utils.fromWei(this.props.tetherBalance, 'Ether')} USDT</b>
                             </span>
                             <div className='input-group mb-4'>
                                 <input 
