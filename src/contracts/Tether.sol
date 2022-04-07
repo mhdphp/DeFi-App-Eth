@@ -7,6 +7,7 @@ contract Tether {
     string public symbol = 'USDT';
     uint256 public totalSupply = 1000000000000000000000000; // 1 million tokens
     uint8 public decimals = 18;
+    address public owner;
 
     event Transfer (
         address indexed _from,
@@ -27,6 +28,7 @@ contract Tether {
 
     constructor() {
         balanceOf[msg.sender] = totalSupply;
+        owner = msg.sender;
     }
 
     // transfer from owner to other address

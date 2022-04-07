@@ -22,10 +22,10 @@ class App extends Component {
        if(window.ethereum){
            window.web3 = new Web3(window.ethereum);
            await window.ethereum.enable();
-           console.log('window.ethereum found - aka wallet')
+        //    console.log('window.ethereum found - aka wallet')
        } else if(window.web3) {
            window.web3 = new Web3(window.web3.currentProvider);
-           console.log('window.web3 found - aka wallet')
+        //    console.log('window.web3 found - aka wallet')
        } else {
            console.log('No Ethereum Provider Found! Check Metamask!')
        }
@@ -52,7 +52,7 @@ class App extends Component {
             // we are using web3 the syntax is a little different
             let tetherBalance = await tether.methods.balanceOf(this.state.account).call();
             // let tetherBalanceC = web3.utils.fromWei(tetherBalance);
-            console.log({'balanceTether' : tetherBalance});
+            // console.log({'balanceTether' : tetherBalance});
             // update the state variable
             this.setState({tetherBalance : tetherBalance.toString()});
         } else {
@@ -68,7 +68,7 @@ class App extends Component {
             // update the state
             this.setState({rwd});
             let rwdBalance = await rwd.methods.balanceOf(this.state.account).call();
-            console.log({'balanceRWD' : rwdBalance});
+            // console.log({'balanceRWD' : rwdBalance});
             // update the state variable
             this.setState({rwdBalance : rwdBalance.toString()});
         } else {
@@ -84,7 +84,7 @@ class App extends Component {
             // update the state
             this.setState({decentralBank});
             let stakingBalance = await decentralBank.methods.stakingBalance(this.state.account).call();
-            console.log({'stakingBalance' : stakingBalance});
+            // console.log({'stakingBalance' : stakingBalance});
             // update the state variable
             this.setState({stakingBalance : stakingBalance.toString()});
         } else {
@@ -113,7 +113,13 @@ class App extends Component {
     render() {
         let content;
         {this.state.loading ? content = <p id='loader' className='text-center' 
-                    style={{margin:'30px'}}><b>Loading Please...</b></p> : content = <Main/>}
+                    style={{margin:'30px'}}><b>Loading Please...</b></p> : 
+                    content = 
+                    <Main
+                        tetherBalance = {this.state.tetherBalance}
+                        rwdBalance = {this.state.rwdBalance}
+                        stakingBalance = {this.state.stakingBalance}
+                    />}
         return(
             <div>
                 <Navbar account={this.state.account}/>
