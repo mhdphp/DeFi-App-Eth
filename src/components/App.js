@@ -111,17 +111,21 @@ class App extends Component {
     }
 
     render() {
+        let content;
+        {this.state.loading ? content = <p id='loader' className='text-center' 
+                    style={{margin:'30px'}}><b>Loading Please...</b></p> : content = <Main/>}
         return(
             <div>
                 <Navbar account={this.state.account}/>
                 <div className='container-fluid text-center' style={{marginTop: '75px'}} >
                    {/* <h2>TEST</h2> */}
-                   <div className='row'>
+                   <div className='row content'>
                         <main role='main' className='col-lg-12 ml-auto mr-auto'
                             style={{maxWidth:'600px', minHeight: '100vm'}}>
-                                <p>test</p>
+                                {/* <p>test</p> */}
                                 <div>
-                                    <Main/>
+                                    {/* <Main/> */}
+                                    { content }
                                 </div>
                         </main> 
                    </div>
