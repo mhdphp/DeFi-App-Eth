@@ -32,7 +32,7 @@ contract DecentralBank {
         // transfer Mock Tether coins to this contract address for staking
         tether.transferFrom(msg.sender, address(this), _amount);
         // update stakingBalanace
-        stakingBalance[msg.sender] += _amount;
+        stakingBalance[msg.sender] = stakingBalance[msg.sender] + _amount ;
         // check if the sender has already staked (is in stakers array)
         if(!hasStaked[msg.sender]) {
             stakers.push(msg.sender);

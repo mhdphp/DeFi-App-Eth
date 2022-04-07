@@ -25,7 +25,15 @@ class Main extends Component {
                     </tbody>
                 </table>
                 <div className='card mb-2' style={{opacity:'0.9'}}>
-                    <form className='mb-3'>
+                    <form className='mb-3'
+                        onSubmit={(event) => {
+                            event.preventDefault()
+                            let amount
+                            amount = this.input.value.toString()
+                            amount = window.web3.utils.toWei(amount, 'Ether')
+                            this.props.stakeTokens(amount)
+                        }}
+                    >
                         <div style={{borderSpace:'0 1em'}}>
                             <label className='float-left' style={{marginLeft:'15px'}}><b>
                                 Stake Tokens</b></label>
@@ -33,7 +41,8 @@ class Main extends Component {
                                 <b>Balance: {window.web3.utils.fromWei(this.props.tetherBalance, 'Ether')} USDT</b>
                             </span>
                             <div className='input-group mb-4'>
-                                <input 
+                                <input
+                                    ref={(input)=> {this.input = input} }  
                                     type="text"
                                     placeholder='0'
                                     required/>
