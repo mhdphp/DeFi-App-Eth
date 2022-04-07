@@ -94,10 +94,6 @@ class App extends Component {
         // since loading is completed we turn it on false
         this.setState({loading: false});
     }
-
-    // two function one that stakes and the other that unstakes
-    // use DecentralBank contract - depositTokens (stake), unstakeTokens
-    // function approve transaction hash
     
     // Staking function
     stakeTokens = (amount) => {
@@ -112,7 +108,18 @@ class App extends Component {
                         this.setState({loading: false});
                     });
             });
-    }       
+    }
+    
+     // unStaking function
+     unstakeTokens = () => {
+        this.setState({loading: true});
+        this.state.decentralBank.methods
+            .unstakedTokens()
+            .send({from:this.state.account})
+            .on('transactionHash', (hash) => {
+                this.setState({loading: false});
+            });
+    }      
     
 
    
@@ -139,7 +146,8 @@ class App extends Component {
                         tetherBalance = {this.state.tetherBalance}
                         rwdBalance = {this.state.rwdBalance}
                         stakingBalance = {this.state.stakingBalance}
-                        stakeTokens ={this.stakeTokens}
+                        stakeTokens = {this.stakeTokens}
+                        unstakeTokens = {this.unstakeTokens}
                     />}
         return(
             <div>
