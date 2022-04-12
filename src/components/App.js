@@ -114,7 +114,7 @@ class App extends Component {
      unstakeTokens = () => {
         this.setState({loading: true});
         this.state.decentralBank.methods
-            .unstakedTokens()
+            .unstakeTokens()
             .send({from:this.state.account})
             .on('transactionHash', (hash) => {
                 this.setState({loading: false});
@@ -153,7 +153,7 @@ class App extends Component {
             <div>
                 <Navbar account={this.state.account}/>
                 <div className='container-fluid text-center' style={{marginTop: '75px'}} >
-                   {/* <h2>TEST</h2> */}
+                   <h2>Dashboard</h2>
                    <div className='row content'>
                         <main role='main' className='col-lg-12 ml-auto mr-auto'
                             style={{maxWidth:'600px', minHeight: '100vm'}}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Web3 from 'web3';
+// import Web3 from 'web3';
 import tether from '../tether.png';
 
 
@@ -38,7 +38,9 @@ class Main extends Component {
                             <label className='float-left' style={{marginLeft:'15px'}}><b>
                                 Stake Tokens</b></label>
                             <span className='float-right' style={{marginRight:'8px'}}>
-                                <b>Balance: {window.web3.utils.fromWei(this.props.tetherBalance, 'Ether')} USDT</b>
+                                <b>Balance: {window.web3.utils.fromWei(this.props.tetherBalance, 'Ether')} 
+                                    USDT
+                                </b>
                             </span>
                             <div className='input-group mb-4'>
                                 <input
@@ -58,7 +60,13 @@ class Main extends Component {
                             </button>
                         </div>
                     </form>
-                    <button type='submit' className='btn btn-primary btn-lg btn-block'>
+                    <button 
+                        type='submit' 
+                        onClick={(event) =>{
+                            event.preventDefault();
+                            this.props.unstakeTokens();
+                        }}
+                        className='btn btn-primary btn-lg btn-block'>
                         Withdraw
                     </button>
                     <div className='card-body text-center' style={{color:'blue'}}>
