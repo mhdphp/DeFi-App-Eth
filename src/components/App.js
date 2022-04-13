@@ -7,6 +7,7 @@ import Web3 from 'web3';
 import Tether from '../abis/Tether.json';
 import RWD from '../abis/RWD.json';
 import DecentralBank from '../abis/DecentralBank.json';
+import ParticleSettings from './ParticleSettings.js';
 
 
 class App extends Component {
@@ -140,7 +141,7 @@ class App extends Component {
     render() {
         let content;
         {this.state.loading ? content = <p id='loader' className='text-center' 
-                    style={{margin:'30px'}}><b>Loading Please...</b></p> : 
+                    style={{margin:'30px', color:'white'}}><b>Loading Please...</b></p> : 
                     content = 
                     <Main
                         tetherBalance = {this.state.tetherBalance}
@@ -150,15 +151,18 @@ class App extends Component {
                         unstakeTokens = {this.unstakeTokens}
                     />}
         return(
-            <div>
+            <div className='App' style={{position:'relative'}}>
+                <div style={{position:'absolute'}}>
+                    <ParticleSettings/>
+                </div>
                 <Navbar account={this.state.account}/>
                 <div className='container-fluid text-center' style={{marginTop: '75px'}} >
-                   <h2>Dashboard</h2>
                    <div className='row content'>
                         <main role='main' className='col-lg-12 ml-auto mr-auto'
                             style={{maxWidth:'600px', minHeight: '100vm'}}>
                                 {/* <p>test</p> */}
-                                <div>
+                                <div className='pt-3'>
+                                    <h2 style={{color: 'white'}}>Dashboard</h2>
                                     {/* <Main/> */}
                                     { content }
                                 </div>
