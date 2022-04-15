@@ -33,10 +33,10 @@ class Airdrop extends Component {
     }
 
     startTimer() {
-        if (this.timer == 0 && this.state.seconds >0) {
+        if (this.timer == 0 && this.state.seconds >0 && this.props.rwdBal == 0) {
             // the second argument is the rate of the timer, which is 1 second
             // at every 1 sec this function will call the countDown function
-            this.timer = setInterval(this.countDown, 1000)
+            this.timer = setInterval(this.countDown, 1000);
         }
     }
 
@@ -59,17 +59,26 @@ class Airdrop extends Component {
     }
 
     airdropReleaseTokens() {
-        let stakingBal = this.props.stakingBal;
-        if (stakingBal >= '20000000000000000000') {
+        // convert from wei to ether
+        let stakingBal = window.web3.utils.fromWei(this.props.stakingBal, 'Ether');
+        // define staking balance threshold in ether - 20 USDT
+        const stakingBalThreshold = window.web3.utils.fromWei('20000000000000000000', 'Ether');
+        if (stakingBal >= stakingBalThreshold) {
             this.startTimer();
+            // this.setState({finalStakeBal: stakingBal});
+            // finalStakeBal = window.web3.utils.fromWei(this.state.finalStakeBal, 'Ether');
         }
         if (this.state.seconds == 0) {
             // window.alert('the timer hits zero....');
+            this.props.issueRwdTokens();
+            this.timer = 0;
+            // window.location.reload();
         }
     }
 
     render() {
         this.airdropReleaseTokens();
+        console.log(this.state.initialStakeBal);
         return(
             <div style={{color: 'black'}}>
                 {this.state.time.h}h : {this.state.time.m}m : {this.state.time.s}s
